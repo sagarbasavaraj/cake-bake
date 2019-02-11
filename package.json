@@ -1,0 +1,30 @@
+{
+  "name": "cake-bake",
+  "version": "1.0.0",
+  "description": "The edible Art",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sagarbasavaraj/cake-bake.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sagarbasavaraj/cake-bake/issues"
+  },
+  "homepage": "https://github.com/sagarbasavaraj/cake-bake#readme",
+  "dependencies": {
+    "babel-plugin-styled-components": "^1.10.0",
+    "express": "^4.16.4",
+    "next": "^7.0.3",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "styled-components": "^4.1.3"
+  }
+}

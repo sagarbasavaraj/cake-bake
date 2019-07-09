@@ -1,0 +1,4 @@
+{
+    "port": 3000,
+    "mongoURI": "mongodb+srv://sanju:Ambusagar15@cluster0-vzwh2.mongodb.net/cakebake?retryWrites=true&w=majority"
+}

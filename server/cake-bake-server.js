@@ -1,6 +1,8 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const config = require("config");
 const CakeBakeDb = require("./db/db");
+const router = require('./routes/cakes');
 
 class CakeBakeServer {
   constructor(requestHandler) {
@@ -8,16 +10,20 @@ class CakeBakeServer {
   }
   
   async start() {
-    const server = express();
+    const app = express();
     const port = config.get("port");
     const cakeBakeDb = new CakeBakeDb();
     await cakeBakeDb.connectDB();
 
-    server.get("*", (req, res) => {
+    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.json());
+    app.use('/api/cakes', router);
+
+    app.get("*", (req, res) => {
       return this.appRequestHandler(req, res);
     });
 
-    server.listen(port, err => {
+    app.listen(port, err => {
       if (err) throw err;
       console.log(`> Ready on http://localhost:${port}`);
     });

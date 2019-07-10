@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const orderSchema = new Schema({
+const cakeSchema = new Schema({
     name: String,
     phoneNumber: Number,
     type: String,
@@ -16,6 +16,6 @@ const orderSchema = new Schema({
     flavour: String
 });
 
-const orderModel = mongoose.model('Order', orderSchema);
+const CakeModel = mongoose.model('Cake', cakeSchema);
 
-module.exports = orderModel;
+module.exports = CakeModel;

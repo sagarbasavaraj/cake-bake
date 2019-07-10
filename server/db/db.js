@@ -8,6 +8,7 @@ class CakeBakeDb {
         dbName: "cakebake",
         useNewUrlParser: true
       });
+      mongoose.set("useFindAndModify", false);
       console.log("connected to MongoDB.....");
     } catch (e) {
       console.error("Error in connecting to data base: ", e.message);

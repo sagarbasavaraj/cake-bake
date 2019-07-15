@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("config");
 const CakeBakeDb = require("./db/db");
-const router = require('./routes/cakes');
+const orderRouter = require('./routes/orders');
 
 class CakeBakeServer {
   constructor(requestHandler) {
@@ -17,7 +17,7 @@ class CakeBakeServer {
 
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
-    app.use('/api/cakes', router);
+    app.use('/api/cakes', orderRouter);
 
     app.get("*", (req, res) => {
       return this.appRequestHandler(req, res);

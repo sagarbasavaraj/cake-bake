@@ -1,33 +1,34 @@
 const express = require("express");
 const { keyBy } = require("lodash");
-const CakeModel = require("../db/models/cake");
-const nodemailer = require("nodemailer");
+const OrderModel = require("../db/models/order");
+const EmailService = require("../services/email-service");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  CakeModel.find((err, cakes) => {
+router.get("/orders", (req, res) => {
+  OrderModel.find((err, orders) => {
     if (err) return res.status(500).send(err);
-    const cakeOrdersData = keyBy(cakes, "_id");
-    return res.json(cakeOrdersData);
+    const ordersData = keyBy(orders, "_id");
+    return res.json(ordersData);
   });
 });
 
-router.post("/", async (req, res) => {
+router.post("/orders", async (req, res) => {
   const { body } = req;
 
   try {
-    const cake = new CakeModel(body);
-    const savedOrder = await cake.save();
+    const order = new OrderModel(body);
+    const savedOrder = await order.save();
+    //EmailService.sendEmail(savedOrder);
     res.json(savedOrder);
   } catch (e) {
     res.status(500).send(e.message);
   }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/orders/:id", (req, res) => {
   const { body, params } = req;
-  CakeModel.findByIdAndUpdate(
+  OrderModel.findByIdAndUpdate(
     params.id,
     body,
     { new: true },
@@ -39,9 +40,9 @@ router.put("/:id", (req, res) => {
   );
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/orders/:id", (req, res) => {
   const { params } = req;
-  CakeModel.findByIdAndRemove(params.id, (err, deletedOrder) => {
+  OrderModel.findByIdAndRemove(params.id, (err, deletedOrder) => {
     // Handle any possible database errors
     if (err) return res.status(500).send(err);
     const response = {

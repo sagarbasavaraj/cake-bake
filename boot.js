@@ -1,5 +1,5 @@
 const next = require("next");
-const CakeBackServer = require("./server/cake-bake-server");
+const CakeBakeServer = require("./server/cake-bake-server");
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
@@ -8,9 +8,9 @@ const requestHandle = app.getRequestHandler();
 app
   .prepare()
   .then(async () => {
-    const cakeBackServer = new CakeBackServer(requestHandle);
+    const cakeBakeServer = new CakeBakeServer(requestHandle);
     try {
-      await cakeBackServer.start();
+      await cakeBakeServer.start();
     } catch (e) {
       console.error(`Error in starting Server`, e);
     }

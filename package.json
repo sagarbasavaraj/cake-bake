@@ -4,7 +4,7 @@
   "description": "The edible Art",
   "main": "index.js",
   "scripts": {
-    "dev": "node boot-server.js",
+    "dev": "node boot.js",
     "build": "next build",
     "start": "NODE_ENV=production node boot-server.js"
   },
@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/sagarbasavaraj/cake-bake#readme",
   "dependencies": {
+    "@material-ui/core": "^4.2.0",
+    "@material-ui/icons": "^4.2.1",
+    "@material-ui/styles": "^4.2.0",
     "babel-plugin-styled-components": "^1.10.6",
     "body-parser": "^1.19.0",
     "config": "^3.1.0",
@@ -28,6 +31,8 @@
     "mongoose": "^5.6.4",
     "next": "^9.0.0",
     "nodemailer": "^6.2.1",
+    "nodemailer-mailgun-transport": "^1.4.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "styled-components": "^4.3.2"

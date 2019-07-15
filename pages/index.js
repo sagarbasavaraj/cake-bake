@@ -1,13 +1,14 @@
 import styled from 'styled-components';
+import Layout from '../src/components/layout';
 
 const Title = styled.h1`
   font-size: 40px;
 `;
 
 const Index = () => (
-  <header>
+  <Layout>
     <Title>Work in progress....</Title>
-  </header>
+  </Layout>
 );
 
 export default Index;

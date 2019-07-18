@@ -1,6 +1,0 @@
-{
-    "port": 3000,
-    "mongoURI": "mongodb+srv://sanju:Arik0712@cluster0-vzwh2.mongodb.net/test?retryWrites=true&w=majority",
-    "EMAIL_API_KEY": "1b4dcc4c9846dbc54327299cc97c271f-afab6073-16535eb7",
-    "EMAIL_DOMAIN": "sandbox9e61e6eaf1474cb18bf7bced91fe9dec.mailgun.org"
-}

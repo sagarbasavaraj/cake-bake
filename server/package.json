@@ -1,0 +1,23 @@
+{
+  "name": "cake-bake-server",
+  "version": "1.0.0",
+  "description": "cake bake server api",
+  "main": "cake-bake-server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.1.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.14",
+    "mongoose": "^5.6.4",
+    "nodemailer": "^6.2.1",
+    "nodemailer-mailgun-transport": "^1.4.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}

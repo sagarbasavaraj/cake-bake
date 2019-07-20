@@ -10,6 +10,7 @@ import {
   Container as MuiContainer
 } from "@material-ui/core";
 import { Menu, Phone, ShoppingCart } from "@material-ui/icons";
+import ImageUpload from "./image-upload";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,7 +44,7 @@ export default function Header() {
           className={classes.contact}
         >
           <Phone />
-          <Typography>+49 15218314613</Typography>
+          <Typography>Call Us +49 15218314613</Typography>
         </Grid>
       </MuiContainer>
       <Toolbar>
@@ -58,6 +59,7 @@ export default function Header() {
         <Typography variant="h6" className={classes.title}>
           Cake Bake
         </Typography>
+        <ImageUpload />
         <IconButton
           className={classes.shoppingCart}
           color="inherit"
@@ -65,8 +67,8 @@ export default function Header() {
         >
           <ShoppingCart />
         </IconButton>
-
-        <Button color="inherit">Login</Button>
+        <Button color="inherit">Sign up</Button>
+        <Button color="inherit">Sign in</Button>
       </Toolbar>
     </AppBar>
   );

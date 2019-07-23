@@ -1,5 +1,4 @@
 import { useState, Fragment } from "react";
-<DialogTitle id="upload-images">Upload images</DialogTitle>;
 import {
   Button,
   Dialog,
@@ -7,11 +6,12 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText
+  DialogContentText,
+  IconButton
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { CloudUpload } from "@material-ui/icons";
-import axios from "axios";
+import fetch from "isomorphic-unfetch";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     display: "none"
+  },
+  upload: {
+    marginRight: theme.spacing(0)
   }
 }));
 
@@ -39,10 +42,11 @@ const ImageUpload = () => {
       for (let i = 0; i < files.length; i++) {
         data.append("images", files[i]);
       }
-      const uploadedFiles = await axios.post(
-        "http://localhost:3000/api/cakes/upload",
-        data
-      );
+      const response = await fetch("http://localhost:3000/api/images/upload", {
+        method: "POST",
+        body: data
+      });
+      const uploadedFiles = await response.json();
       console.log(uploadedFiles);
       setOpen(false);
     } catch (e) {
@@ -62,16 +66,14 @@ const ImageUpload = () => {
 
   return (
     <Fragment>
-      <Button
-        variant="contained"
-        color="default"
-        component="span"
-        className={classes.button}
+      <IconButton
+        className={classes.upload}
+        color="inherit"
+        aria-label="cart"
         onClick={handleOpen}
       >
-        Upload
-        <CloudUpload className={classes.rightIcon} />
-      </Button>
+        <CloudUpload />
+      </IconButton>
       <Dialog open={open} aria-labelledby="upload-images">
         <DialogTitle id="upload-images">Upload Images</DialogTitle>
         <DialogContent>

@@ -1,5 +1,5 @@
 const multer = require("multer");
-const Grid = require("gridfs-stream");
+const GridFsStream = require("gridfs-stream");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const path = require("path");
@@ -19,22 +19,26 @@ class StorageService {
             //generate random names.
             const filename =
               buf.toString("hex") + path.extname(file.originalname);
+            const nameWithoutExt = path.parse(file.originalname).name;
             const fileInfo = {
               filename: filename,
-              bucketName: "photos"
+              bucketName: "photos",
+              metadata: {
+                originalname: file.originalname,
+                title: nameWithoutExt
+              }
             };
             resolve(fileInfo);
           });
         });
       }
     });
-    this.gfs = Grid(db, mongoose.mongo);
+
+    //initialize stream
+    this.gfs = GridFsStream(db, mongoose.mongo);
+    //collection
     this.gfs.collection("photos");
     this.upload = multer({ storage });
-  }
-
-  static get upload() {
-    return this.upload;
   }
 }
 

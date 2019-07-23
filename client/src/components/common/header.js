@@ -20,13 +20,13 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   shoppingCart: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(0)
   },
   title: {
     flexGrow: 1
   },
   contact: {
-    paddingTop: theme.spacing(1)
+    paddingTop: theme.spacing(0)
   }
 }));
 

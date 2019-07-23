@@ -1,10 +1,11 @@
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const config = require("config");
 const CakeBakeDb = require("./db/db");
-const router = require("./routes/router");
-const StorageService = require('./services/storage-service');
+const router = require("./routes/default-router");
+const orderRouter = require("./routes/order-router");
+const StorageService = require("./services/storage-service");
 
 class CakeBakeServer {
   async start() {
@@ -18,7 +19,8 @@ class CakeBakeServer {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
 
-    app.use("/api/cakes", router(storageService));
+    app.use("/api/images", router(storageService));
+    app.use("/api/orders", orderRouter);
 
     app.listen(PORT, err => {
       if (err) throw err;

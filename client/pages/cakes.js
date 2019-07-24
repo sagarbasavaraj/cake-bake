@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/styles";
 import { get } from "lodash";
 import { withRouter } from "next/router";
 import Layout from "../src/components/layout";
+import CakeDetails from "../src/components/cake-details/cake-details";
 
 const styles = {
   card: {
@@ -45,8 +46,8 @@ class Cakes extends PureComponent {
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Box pr={4}>
-                <h1>details</h1>
+              <Box p={2}>
+                <CakeDetails image={image} />
               </Box>
             </Grid>
           </Grid>

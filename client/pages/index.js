@@ -1,6 +1,5 @@
 import { Component } from "react";
-import styled from "styled-components";
-import Layout from "../src/components/layout";
+import Layout from "../src/components/common/layout";
 import CakesList from "../src/components/home/cakes-list";
 import fetch from 'isomorphic-unfetch';
 

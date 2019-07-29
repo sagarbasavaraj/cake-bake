@@ -2,7 +2,7 @@ import Document, { Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 import { ServerStyleSheets } from "@material-ui/styles";
 import flush from "styled-jsx/server";
-import theme from "../src/theme";
+import theme from "../src/helpers/theme";
 
 export default class CakeBakeDocument extends Document {
   static async getInitialProps(ctx) {

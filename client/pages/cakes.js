@@ -3,7 +3,7 @@ import { Grid, Container, Box, Card, CardMedia } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { get } from "lodash";
 import { withRouter } from "next/router";
-import Layout from "../src/components/layout";
+import Layout from "../src/components/common/layout";
 import CakeDetails from "../src/components/cake-details/cake-details";
 
 const styles = {
@@ -13,9 +13,8 @@ const styles = {
 };
 
 class Cakes extends PureComponent {
-  static async getInitialProps(context) {
-    const { id } = context.query;
-    console.log("client...", id);
+  static async getInitialProps({ctx}) {
+    const { id } = ctx.query;
     try {
       const response = await fetch(
         `http://localhost:3000/api/images/details/${id}`

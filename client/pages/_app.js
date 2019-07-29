@@ -3,13 +3,26 @@ import App, { Container } from "next/app";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import theme from "../src/theme";
+import theme from "../src/helpers/theme";
+import { Provider } from "react-redux";
+import withRedux from "next-redux-wrapper";
+import withReduxSaga from "next-redux-saga";
+import createStore from "../src/store/store";
 
 class CakeBakeApp extends App {
+  static async getInitialProps({ Component, ctx }) {
+    let pageProps = {};
+
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps({ ctx });
+    }
+
+    return { pageProps };
+  }
   constructor(props) {
     super(props);
   }
-  
+
   componentDidMount() {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -19,7 +32,7 @@ class CakeBakeApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, store } = this.props;
 
     return (
       <Container>
@@ -29,11 +42,13 @@ class CakeBakeApp extends App {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Component {...pageProps} />
+          <Provider store={store}>
+            <Component {...pageProps} />
+          </Provider>
         </ThemeProvider>
       </Container>
     );
   }
 }
 
-export default CakeBakeApp;
+export default withRedux(createStore)(withReduxSaga(CakeBakeApp));

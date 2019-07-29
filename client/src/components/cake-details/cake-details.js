@@ -5,8 +5,14 @@ import {
   Typography,
   Select,
   OutlinedInput,
-  MenuItem
+  MenuItem,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  TextField,
+  Button
 } from "@material-ui/core";
+import { ShoppingCart } from "@material-ui/icons";
 import { object } from "prop-types";
 import { get } from "lodash";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -14,6 +20,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateMomentUtils from "@date-io/moment";
 import moment from "moment";
+import CareInstructions from "./care-instructions";
+import DeliveryInformation from './delivery-information';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -23,16 +31,30 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     minWidth: 120,
     display: "block",
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2)
   },
   field: {
     display: "block"
+  },
+  group: {
+    margin: theme.spacing(1, 0)
+  },
+  button: {
+    margin: theme.spacing(2, 2, 2, 0)
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1)
+  },
+  root: {
+    display: "inline"
   }
 }));
 
 const initialValues = {
-  kg: "",
-  datetime: moment()
+  kg: 1,
+  datetime: moment(),
+  cakeType: "egg"
 };
 
 function CakeDetails({ image }) {
@@ -75,9 +97,7 @@ function CakeDetails({ image }) {
                         />
                       }
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
+                      <MenuItem value={0.5}>half</MenuItem>
                       <MenuItem value={1}>One</MenuItem>
                       <MenuItem value={2}>Two</MenuItem>
                       <MenuItem value={3}>Three</MenuItem>
@@ -96,9 +116,9 @@ function CakeDetails({ image }) {
                   <MuiPickersUtilsProvider utils={DateMomentUtils}>
                     <DateTimePicker
                       {...field}
-                      keyboard
+                      keyboard="true"
                       className={classes.formControl}
-                      label="DateTime"
+                      label="Select Delivery Date and Time"
                       inputVariant="outlined"
                       disablePast
                       onChange={value => {
@@ -109,9 +129,71 @@ function CakeDetails({ image }) {
                 );
               }}
             />
+            <Field
+              name="cakeType"
+              render={({ field, form }) => {
+                return (
+                  <RadioGroup
+                    aria-label="cakeType"
+                    name={field.name}
+                    className={classes.group}
+                    {...field}
+                    row
+                  >
+                    <FormControlLabel
+                      value="egg"
+                      control={<Radio />}
+                      label="With Egg"
+                    />
+                    <FormControlLabel
+                      value="eggless"
+                      control={<Radio />}
+                      label="Eggless"
+                    />
+                  </RadioGroup>
+                );
+              }}
+            />
+            <Field
+              name="message"
+              render={(field, form) => {
+                return (
+                  <TextField
+                    label="Message on Cake"
+                    multiline
+                    rowsMax="3"
+                    margin="normal"
+                    helperText="Max 25"
+                    variant="outlined"
+                    {...field}
+                  />
+                );
+              }}
+            />
+            <FormControl className={classes.root}>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                size="large"
+              >
+                Add to Cart
+                <ShoppingCart className={classes.rightIcon} />
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                size="large"
+              >
+                Buy Now
+              </Button>
+            </FormControl>
           </Form>
         )}
       </Formik>
+      <DeliveryInformation />
+      <CareInstructions />
     </Fragment>
   );
 }

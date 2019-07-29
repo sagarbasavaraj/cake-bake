@@ -5,12 +5,13 @@ import {
   Toolbar,
   Grid,
   IconButton,
-  Button,
   Typography,
   Container as MuiContainer
 } from "@material-ui/core";
-import { Menu, Phone, ShoppingCart } from "@material-ui/icons";
+import { Menu, Phone } from "@material-ui/icons";
+import Link from "next/link";
 import ImageUpload from "./image-upload";
+import Cart from "./cart";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,11 +20,11 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2)
   },
-  shoppingCart: {
-    marginRight: theme.spacing(0)
-  },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    "& > span:hover": {
+      cursor: "pointer"
+    }
   },
   contact: {
     paddingTop: theme.spacing(0)
@@ -56,19 +57,13 @@ export default function Header() {
         >
           <Menu />
         </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          Cake Bake
-        </Typography>
+        <Link href="/">
+          <Typography variant="h6" className={classes.title}>
+            <span> Cake Bake</span>
+          </Typography>
+        </Link>
+        <Cart />
         <ImageUpload />
-        <IconButton
-          className={classes.shoppingCart}
-          color="inherit"
-          aria-label="cart"
-        >
-          <ShoppingCart />
-        </IconButton>
-        <Button color="inherit">Sign up</Button>
-        <Button color="inherit">Sign in</Button>
       </Toolbar>
     </AppBar>
   );

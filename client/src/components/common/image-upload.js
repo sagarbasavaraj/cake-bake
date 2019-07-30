@@ -37,7 +37,6 @@ const ImageUpload = () => {
 
   const save = async () => {
     try {
-      console.log(files);
       const data = new FormData();
       for (let i = 0; i < files.length; i++) {
         data.append("images", files[i]);
@@ -47,7 +46,6 @@ const ImageUpload = () => {
         body: data
       });
       const uploadedFiles = await response.json();
-      console.log(uploadedFiles);
       setOpen(false);
     } catch (e) {
       console.error(e);

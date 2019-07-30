@@ -13,7 +13,7 @@ import {
   Button
 } from "@material-ui/core";
 import { ShoppingCart } from "@material-ui/icons";
-import { object } from "prop-types";
+import { object, func } from "prop-types";
 import { get } from "lodash";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,7 +21,7 @@ import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateMomentUtils from "@date-io/moment";
 import moment from "moment";
 import CareInstructions from "./care-instructions";
-import DeliveryInformation from './delivery-information';
+import DeliveryInformation from "./delivery-information";
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -57,8 +57,7 @@ const initialValues = {
   cakeType: "egg"
 };
 
-function CakeDetails({ image }) {
-  const onFormSubmit = (values, { setSubmitting }) => {};
+function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
@@ -72,13 +71,12 @@ function CakeDetails({ image }) {
       <Typography variant="h5" gutterBottom>
         {get(image, "metadata.title")}
       </Typography>
-      <Formik onSubmit={onFormSubmit} initialValues={initialValues}>
-        {({ isSubmitting }) => (
+      <Formik initialValues={initialValues}>
+        {({ values }) => (
           <Form className={classes.form}>
             <Field
               name="kg"
               render={({ field, form }) => {
-                console.log(field);
                 return (
                   <FormControl
                     variant="outlined"
@@ -176,6 +174,7 @@ function CakeDetails({ image }) {
                 color="secondary"
                 className={classes.button}
                 size="large"
+                onClick={() => onAddToCartBtnClick(values)}
               >
                 Add to Cart
                 <ShoppingCart className={classes.rightIcon} />
@@ -185,6 +184,7 @@ function CakeDetails({ image }) {
                 color="primary"
                 className={classes.button}
                 size="large"
+                onClick={() => onBuyButtonClick(values)}
               >
                 Buy Now
               </Button>
@@ -199,7 +199,9 @@ function CakeDetails({ image }) {
 }
 
 CakeDetails.propTypes = {
-  image: object
+  image: object,
+  onBuyButtonClick: func.isRequired,
+  onAddToCartBtnClick: func.isRequired
 };
 
 export default CakeDetails;

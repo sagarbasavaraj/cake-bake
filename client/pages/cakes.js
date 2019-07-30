@@ -3,6 +3,7 @@ import { Grid, Container, Box, Card, CardMedia } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { get } from "lodash";
 import { withRouter } from "next/router";
+import {connect} from 'react-redux';
 import Layout from "../src/components/common/layout";
 import CakeDetails from "../src/components/cake-details/cake-details";
 
@@ -13,19 +14,26 @@ const styles = {
 };
 
 class Cakes extends PureComponent {
-  static async getInitialProps({ctx}) {
+  static async getInitialProps({ ctx }) {
     const { id } = ctx.query;
     try {
       const response = await fetch(
         `http://localhost:3000/api/images/details/${id}`
       );
-      const {file} = await response.json();
+      const { file } = await response.json();
       return { image: file };
     } catch (e) {
       console.log("error....", e);
       return { error: e };
     }
   }
+
+  handleAddToCartBtnClick = data => {
+    this.props.dispatch({type: 'SAVE_REQUESTED', payload: data})
+  };
+
+  handleBuyBtnClick = data => {};
+
   render() {
     const { classes, image } = this.props;
     return (
@@ -46,7 +54,11 @@ class Cakes extends PureComponent {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Box p={2}>
-                <CakeDetails image={image} />
+                <CakeDetails
+                  image={image}
+                  onAddToCartBtnClick={this.handleAddToCartBtnClick}
+                  onBuyButtonClick={this.handleBuyBtnClick}
+                />
               </Box>
             </Grid>
           </Grid>
@@ -56,4 +68,4 @@ class Cakes extends PureComponent {
   }
 }
 
-export default withRouter(withStyles(styles)(Cakes));
+export default connect()(withRouter(withStyles(styles)(Cakes)));

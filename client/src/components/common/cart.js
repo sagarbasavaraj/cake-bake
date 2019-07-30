@@ -6,9 +6,14 @@ import {
   Button,
   IconButton,
   Badge,
-  Box
+  Box,
+  Avatar,
+  Card,
+  CardHeader,
+  CardContent
 } from "@material-ui/core";
-import { ShoppingCart, Close } from "@material-ui/icons";
+import { ShoppingCart, Close, Delete } from "@material-ui/icons";
+import { red, grey } from "@material-ui/core/colors";
 
 const popover = {
   anchorOrigin: {
@@ -29,9 +34,7 @@ function styles(theme) {
     badge: {
       margin: theme.spacing(2)
     },
-    cartContainer: {
-      "min-width": "320px"
-    },
+    cartContainer: {},
     carHeader: {
       display: "flex",
       "align-items": "center",
@@ -39,6 +42,9 @@ function styles(theme) {
       "& > body1": {
         "flex-grow": 1
       }
+    },
+    avatar: {
+      background: red[500]
     }
   };
 }
@@ -94,6 +100,38 @@ class Cart extends PureComponent {
                 <Close />
               </IconButton>
             </Box>
+            <Box p={2}>
+              <Box component={Card} boxShadow={1}>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="recipe" className={classes.avatar}>
+                      R
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton aria-label="delete">
+                      <Delete />
+                    </IconButton>
+                  }
+                  title="Shrimp and Chorizo Paella"
+                  subheader="September 14, 2016"
+                />
+                <Box p={2}>
+                  <Box
+                    textAlign="center"
+                    bgcolor={grey[100]}
+                    component={CardContent}
+                    borderRadius={3}
+                    p={2}
+                  >
+                    <Typography>July 12, 2019 16:45 PM</Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            <Button fullWidth variant="contained" size="large" color="primary">
+              Proceed to Checkout
+            </Button>
           </Box>
         </Popover>
       </Fragment>

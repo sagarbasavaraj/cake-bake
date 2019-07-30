@@ -1,13 +1,13 @@
 import { applyMiddleware, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { combineReducers } from 'redux-seamless-immutable'
+import { combineReducers } from "redux-seamless-immutable";
 
 import commonReducer from "../reducers/reducer";
-import {rootSaga} from "../sagas/sagas";
+import rootSaga from "../sagas/sagas";
 
 const rootReducer = combineReducers({
   common: commonReducer
-})
+});
 
 const bindMiddleware = middleware => {
   if (process.env.NODE_ENV !== "production") {
@@ -19,10 +19,7 @@ const bindMiddleware = middleware => {
 
 function configureStore() {
   const sagaMiddleware = createSagaMiddleware();
-  const store = createStore(
-    rootReducer,
-    bindMiddleware([sagaMiddleware])
-  );
+  const store = createStore(rootReducer, bindMiddleware([sagaMiddleware]));
 
   store.sagaTask = sagaMiddleware.run(rootSaga);
 

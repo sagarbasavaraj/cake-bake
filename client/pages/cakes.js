@@ -3,9 +3,10 @@ import { Grid, Container, Box, Card, CardMedia } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { get } from "lodash";
 import { withRouter } from "next/router";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import Layout from "../src/components/common/layout";
 import CakeDetails from "../src/components/cake-details/cake-details";
+import Spinner from "../src/components/common/spinner";
 
 const styles = {
   card: {
@@ -29,7 +30,7 @@ class Cakes extends PureComponent {
   }
 
   handleAddToCartBtnClick = data => {
-    this.props.dispatch({type: 'SAVE_REQUESTED', payload: data})
+    this.props.dispatch({ type: "SAVE_ORDER", payload: data });
   };
 
   handleBuyBtnClick = data => {};
@@ -38,6 +39,7 @@ class Cakes extends PureComponent {
     const { classes, image } = this.props;
     return (
       <Layout>
+        <Spinner />
         <Container>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

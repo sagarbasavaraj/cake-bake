@@ -107,7 +107,7 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
               }}
             />
             <Field
-              name="datetime"
+              name="deliveryDateTime"
               render={({ field, form }) => {
                 const { setFieldValue } = form;
                 return (
@@ -120,7 +120,7 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
                       inputVariant="outlined"
                       disablePast
                       onChange={value => {
-                        setFieldValue("datetime", value);
+                        setFieldValue("deliveryDateTime", value);
                       }}
                     />
                   </MuiPickersUtilsProvider>

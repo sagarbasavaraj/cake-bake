@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const orderSchema = new Schema({
+const OrderSchema = new Schema({
   kg: Number,
   deliveryDateTime: Date,
   status: String,
@@ -11,6 +11,6 @@ const orderSchema = new Schema({
   flavour: String
 });
 
-const OrderModel = mongoose.model("Order", orderSchema);
+const OrderModel = mongoose.model("Order", OrderSchema);
 
 module.exports = OrderModel;

@@ -4,11 +4,11 @@ import {
   AppBar,
   Toolbar,
   Grid,
-  IconButton,
   Typography,
-  Container as MuiContainer
+  Container as MuiContainer,
+  Button
 } from "@material-ui/core";
-import { Menu, Phone } from "@material-ui/icons";
+import { Phone } from "@material-ui/icons";
 import Link from "next/link";
 import ImageUpload from "./image-upload";
 import Cart from "./cart";
@@ -49,14 +49,6 @@ export default function Header() {
         </Grid>
       </MuiContainer>
       <Toolbar>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="Menu"
-        >
-          <Menu />
-        </IconButton>
         <Link href="/">
           <Typography variant="h6" className={classes.title}>
             <span> Cake Bake</span>
@@ -64,6 +56,11 @@ export default function Header() {
         </Link>
         <Cart />
         <ImageUpload />
+        <Link href="/signup">
+          <Button variant="contained" color="secondary">
+            Sign Up
+          </Button>
+        </Link>
       </Toolbar>
     </AppBar>
   );

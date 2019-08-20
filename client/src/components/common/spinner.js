@@ -21,7 +21,7 @@ class Spinner extends PureComponent {
   };
   render() {
     const { showSpinner } = this.props;
-    //if (!showSpinner) return null;
+    if (!showSpinner) return null;
 
     return (
       <Dialog>

@@ -29,6 +29,12 @@ const useStyles = makeStyles(theme => ({
   card: {
     padding: theme.spacing(0)
   },
+  title: {
+    cursor: "pointer",
+    "&:hover": {
+      textDecoration: "none"
+    }
+  },
   form: {
     display: "flex",
     flexDirection: "column"
@@ -41,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1),
     cursor: "pointer"
   },
-  "iconPassButton": {
+  iconPassButton: {
     marginRight: "-4px"
   }
 }));
@@ -78,7 +84,9 @@ const Signup = () => {
     <Container>
       <Box p={3} display="flex" justifyContent="center" alignItems="center">
         <Typography component="h4" variant="h4">
-          Cake Bake
+          <Link href="/">
+            <MLink className={classes.title}>Cake Bake</MLink>
+          </Link>
         </Typography>
       </Box>
       <Box display="flex" justifyContent="center" alignItems="center">
@@ -133,6 +141,7 @@ const Signup = () => {
                             variant="outlined"
                             type={showPassword ? "text" : "password"}
                             label="Password"
+                            helperText="Passwords must be at least 6 characters."
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="end">

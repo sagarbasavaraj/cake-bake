@@ -15,7 +15,8 @@ import Cart from "./cart";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    background: "#232f3e"
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -28,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
   contact: {
     paddingTop: theme.spacing(0)
+  },
+  loginButton: {
+    marginRight: theme.spacing(1)
   }
 }));
 
@@ -35,7 +39,7 @@ export default function Header() {
   const classes = useStyles();
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={classes.root}>
       <MuiContainer>
         <Grid
           container
@@ -56,6 +60,16 @@ export default function Header() {
         </Link>
         <Cart />
         <ImageUpload />
+        <Link href="/login">
+          <Button
+            variant="outlined"
+            color="secondary"
+            className={classes.loginButton}
+          >
+            Log In
+          </Button>
+        </Link>
+
         <Link href="/signup">
           <Button variant="contained" color="secondary">
             Sign Up

@@ -15,7 +15,7 @@ import {
   Link as MLink
 } from "@material-ui/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Email, Person, Visibility, VisibilityOff } from "@material-ui/icons";
+import { Email, Visibility, VisibilityOff } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 
@@ -50,14 +50,6 @@ const useStyles = makeStyles(theme => ({
     marginRight: "-4px"
   }
 }));
-
-const nameFieldInputProps = {
-  endAdornment: (
-    <InputAdornment position="start">
-      <Person />
-    </InputAdornment>
-  )
-};
 
 const emailFieldInputProps = {
   endAdornment: (

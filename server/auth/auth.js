@@ -73,13 +73,12 @@ passport.use(
       //we expect the user to send the token as a query paramater with the name 'secret_token'
       jwtFromRequest: ExtractJWT.fromHeader("token")
     },
-    async (token, done) => {
-      try {
-        //Pass the user details to the next middleware
+   (token, done) => {
+      if (token) {
         return done(null, token.user);
-      } catch (error) {
-        done(error);
-      }
+      };
+      console.log('jwt invalid');
+      return done(new Error('Error JWT Invalid'));
     }
   )
 );

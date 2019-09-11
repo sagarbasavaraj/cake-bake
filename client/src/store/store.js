@@ -2,11 +2,13 @@ import { applyMiddleware, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { combineReducers } from "redux-seamless-immutable";
 
-import commonReducer from "../reducers/reducer";
+import commonReducer from "../actions/common-actions";
+import loginReducer from "../actions/login-actions";
 import rootSaga from "../sagas/sagas";
 
 const rootReducer = combineReducers({
-  common: commonReducer
+  common: commonReducer,
+  session: loginReducer
 });
 
 const bindMiddleware = middleware => {

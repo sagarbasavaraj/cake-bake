@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import Layout from "../src/components/common/layout";
 import CakeDetails from "../src/components/cake-details/cake-details";
 import Spinner from "../src/components/common/spinner";
+import {saveOrder} from "../src/actions/common-actions";
 
 const styles = {
   card: {
@@ -30,7 +31,7 @@ class Cakes extends PureComponent {
   }
 
   handleAddToCartBtnClick = data => {
-    this.props.dispatch({ type: "SAVE_ORDER", payload: data });
+    this.props.dispatch(saveOrder(data));
   };
 
   handleBuyBtnClick = data => {};

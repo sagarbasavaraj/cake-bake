@@ -4,11 +4,13 @@ import { combineReducers } from "redux-seamless-immutable";
 
 import commonReducer from "../actions/common-actions";
 import loginReducer from "../actions/login-actions";
+import orderReducer from "../actions/order-actions";
 import rootSaga from "../sagas/sagas";
 
 const rootReducer = combineReducers({
   common: commonReducer,
-  session: loginReducer
+  session: loginReducer,
+  order: orderReducer
 });
 
 const bindMiddleware = middleware => {

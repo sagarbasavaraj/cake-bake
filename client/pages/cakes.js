@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import Layout from "../src/components/common/layout";
 import CakeDetails from "../src/components/cake-details/cake-details";
 import Spinner from "../src/components/common/spinner";
-import {saveOrder} from "../src/actions/common-actions";
+import { saveOrder } from "../src/actions/login-actions";
 
 const styles = {
   card: {

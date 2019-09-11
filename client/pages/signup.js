@@ -18,7 +18,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Email, Person, Visibility, VisibilityOff } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
+import { func } from "prop-types";
+import { signup } from "../src/actions/login-actions";
 
 const initialValues = {
   name: "",
@@ -69,7 +71,7 @@ const emailFieldInputProps = {
   )
 };
 
-const Signup = ({dispatch}) => {
+const Signup = ({ dispatch }) => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -81,8 +83,8 @@ const Signup = ({dispatch}) => {
     event.preventDefault();
   };
 
-  const handleFormSubmit = (values) => {
-    dispatch();
+  const handleFormSubmit = values => {
+    dispatch(signup(values));
   };
 
   return (
@@ -99,10 +101,7 @@ const Signup = ({dispatch}) => {
           <CardHeader title="Sign Up" />
           <Divider />
           <CardContent>
-            <Formik
-              initialValues={initialValues}
-              onSubmit={handleFormSubmit}
-            >
+            <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
               {({ handleSubmit }) => {
                 return (
                   <Form className={classes.form} onSubmit={handleSubmit}>
@@ -201,5 +200,8 @@ const Signup = ({dispatch}) => {
   );
 };
 
-export default connect()(Signup);
+Signup.propTypes = {
+  dispatch: func
+};
 
+export default connect()(Signup);

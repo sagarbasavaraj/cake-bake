@@ -18,6 +18,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Email, Visibility, VisibilityOff } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
+import { login } from "../src/actions/login-actions";
+import { connect } from "react-redux";
+import { func } from "prop-types";
 
 const initialValues = {
   email: "",
@@ -59,7 +62,7 @@ const emailFieldInputProps = {
   )
 };
 
-const Login = () => {
+const Login = ({ dispatch }) => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -69,6 +72,10 @@ const Login = () => {
 
   const handleMouseDownPassword = event => {
     event.preventDefault();
+  };
+
+  const handleFormSubmit = values => {
+    dispatch(login(values));
   };
 
   return (
@@ -85,13 +92,10 @@ const Login = () => {
           <CardHeader title="Log In" />
           <Divider />
           <CardContent>
-            <Formik
-              initialValues={initialValues}
-              onSubmit={(values, { setSubmitting }) => {}}
-            >
-              {({ values, handleSubmit }) => {
+            <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
+              {({ handleSubmit }) => {
                 return (
-                  <Form className={classes.form}>
+                  <Form className={classes.form} onSubmit={handleSubmit}>
                     <Field
                       name="email"
                       render={({ field }) => {
@@ -146,6 +150,7 @@ const Login = () => {
                         size="large"
                         variant="contained"
                         color="secondary"
+                        type="submit"
                       >
                         Log in
                       </Button>
@@ -170,4 +175,8 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  dispatch: func
+};
+
+export default connect()(Login);

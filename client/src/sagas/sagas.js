@@ -8,6 +8,7 @@ import {
   LOGIN,
   SIGN_UP
 } from "../actions/login-actions";
+import {navigateTo} from "../helpers/navigation";
 
 //-----------LOGIN SAGAS --------------------------------------------------
 function* login(action) {
@@ -15,6 +16,7 @@ function* login(action) {
     yield put(showSpinner(true));
     const user = yield call(post, "/users/login", action.payload);
     yield put(loginSuccess(user));
+    yield call(navigateTo, "/");
   } catch (error) {
     yield put(setError(error));
   } finally {
@@ -26,7 +28,7 @@ function* signup(action) {
   try {
     yield put(showSpinner(true));
     yield call(post, "/users/signup", action.payload);
-    // navigate to login page.
+    yield call(navigateTo, "/login");
   } catch (error) {
     yield put(setError(error));
   } finally {

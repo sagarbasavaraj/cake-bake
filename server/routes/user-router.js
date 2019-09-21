@@ -33,7 +33,6 @@ router.post("/login", async (req, res, next) => {
         return next(err);
       }
       if (!user) {
-        //TODO redirect to login page.
         return next(info);
       }
       req.login(user, { session: false }, async error => {

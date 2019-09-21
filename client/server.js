@@ -9,7 +9,6 @@ const requestHandle = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
-    console.log('serever');
     const server = express();
 
     server.get("*", (req, res) => {

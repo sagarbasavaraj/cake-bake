@@ -1,29 +1,16 @@
-import axios from "axios";
 import fetch from "isomorphic-unfetch";
 
 const API_BASE_PATH = "http://localhost:3000/api";
 
-export const init = () => {
-  axios.defaults.baseURL = "http://localhost:3000/api";
-  axios.defaults.headers.post["Content-Type"] = "application/json";
-  axios.defaults.headers.put["Content-Type"] = "application/json";
-};
-
-// export const get = (url, params, config = {}) => {
-//   return axios.get(url, { ...config, params }).then(response => response.data);
-// };
-
-// export const post = (url, body, config = {}) => {
-//   return axios.post(url, body, config).then(response => response.data);
-// };
-
-export const put = (url, body, config = {}) => {
-  return axios.put(url, body, config).then(response => response.data);
-};
-
-export const del = (url, config = {}) => {
-  return axios.delete(url, config).then(response => response.data);
-};
+function checkStatus(response) {
+  if (response.ok) {
+    return response;
+  } else {
+    var error = new Error(response.statusText);
+    error.response = response;
+    return Promise.reject(error);
+  }
+}
 
 export const post = async (url, body, headers = {}) => {
   return fetch(`${API_BASE_PATH}${url}`, {
@@ -33,5 +20,16 @@ export const post = async (url, body, headers = {}) => {
       ...headers
     },
     body: JSON.stringify(body)
-  }).then(response => response.json());
+  })
+    .then(checkStatus)
+    .then(response => response.json());
+};
+
+export const get = async (url, headers = {}) => {
+  return fetch(`${API_BASE_PATH}${url}`, {
+    method: "GET",
+    headers
+  })
+    .then(checkStatus)
+    .then(response => response.json());
 };

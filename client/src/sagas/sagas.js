@@ -1,26 +1,64 @@
-import { call, put, takeEvery, all } from "redux-saga/effects";
-import { post } from "../helpers/api";
+import {
+  fork,
+  call,
+  put,
+  takeEvery,
+  all,
+  cancel,
+  take
+} from "redux-saga/effects";
+import { post, get } from "../helpers/api";
 import { showSpinner } from "../actions/common-actions";
 import { orderSaved, orderFailed, SAVE_ORDER } from "../actions/order-actions";
 import {
   loginSuccess,
-  setError,
+  loginError,
   LOGIN,
-  SIGN_UP
+  SIGN_UP,
+  LOGOUT,
+  LOGIN_ERROR,
+  logoutSuccess
 } from "../actions/login-actions";
-import {navigateTo} from "../helpers/navigation";
+import { navigateTo } from "../helpers/navigation";
 
 //-----------LOGIN SAGAS --------------------------------------------------
-function* login(action) {
+
+function* authorize(email, password) {
   try {
     yield put(showSpinner(true));
-    const user = yield call(post, "/users/login", action.payload);
+    const user = yield call(post, "/users/login", { email, password });
     yield put(loginSuccess(user));
     yield call(navigateTo, "/");
   } catch (error) {
-    yield put(setError(error));
+    yield put(loginError(error));
   } finally {
     yield put(showSpinner(false));
+  }
+}
+
+function* logout() {
+  try {
+    console.log("calling logout");
+    yield call(get, "/users/logout");
+    yield put(logoutSuccess());
+    yield call(navigateTo, "/");
+  } catch (error) {
+    console.error("Error in logging out..", error);
+  }
+}
+
+function* loginFlow() {
+  while (true) {
+    const {
+      payload: { email, password }
+    } = yield take(LOGIN);
+    const task = yield fork(authorize, email, password);
+    const action = yield take([LOGOUT, LOGIN_ERROR]);
+    console.log(action);
+    if (action.type === LOGOUT) {
+      yield cancel(task);
+      yield call(logout);
+    }
   }
 }
 
@@ -30,7 +68,7 @@ function* signup(action) {
     yield call(post, "/users/signup", action.payload);
     yield call(navigateTo, "/login");
   } catch (error) {
-    yield put(setError(error));
+    yield put(loginError(error));
   } finally {
     yield put(showSpinner(false));
   }
@@ -38,10 +76,6 @@ function* signup(action) {
 
 function* signupSaga() {
   yield takeEvery(SIGN_UP, signup);
-}
-
-function* loginSaga() {
-  yield takeEvery(LOGIN, login);
 }
 
 //-----------END OF LOGIN SAGAS -------------------------------------------
@@ -67,5 +101,5 @@ function* orderSaga() {
 //-----------END OF ORDER SAGAS ----------------------------------------------------
 
 export default function* rootSaga() {
-  yield all([orderSaga(), signupSaga(), loginSaga()]);
+  yield all([orderSaga(), signupSaga(), loginFlow()]);
 }

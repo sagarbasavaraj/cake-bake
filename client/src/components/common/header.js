@@ -12,6 +12,7 @@ import { Phone } from "@material-ui/icons";
 import Link from "next/link";
 import ImageUpload from "./image-upload";
 import Cart from "./cart";
+import Auth from "./auth";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,9 +30,6 @@ const useStyles = makeStyles(theme => ({
   },
   contact: {
     paddingTop: theme.spacing(0)
-  },
-  loginButton: {
-    marginRight: theme.spacing(1)
   }
 }));
 
@@ -60,21 +58,7 @@ export default function Header() {
         </Link>
         <Cart />
         <ImageUpload />
-        <Link href="/login">
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.loginButton}
-          >
-            Log In
-          </Button>
-        </Link>
-
-        <Link href="/signup">
-          <Button variant="contained" color="secondary">
-            Sign Up
-          </Button>
-        </Link>
+        <Auth />
       </Toolbar>
     </AppBar>
   );

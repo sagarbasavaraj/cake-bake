@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import withRedux from "next-redux-wrapper";
 import withReduxSaga from "next-redux-saga";
 import createStore from "../src/store/store";
+import storage from "../src/helpers/storage-service";
 
 class CakeBakeApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -19,9 +20,6 @@ class CakeBakeApp extends App {
 
     return { pageProps };
   }
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     // Remove the server-side injected CSS.
@@ -29,6 +27,8 @@ class CakeBakeApp extends App {
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
+    //initialize storage service
+    storage.init();
   }
 
   render() {

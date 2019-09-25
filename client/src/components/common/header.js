@@ -5,8 +5,7 @@ import {
   Toolbar,
   Grid,
   Typography,
-  Container as MuiContainer,
-  Button
+  Container as MuiContainer
 } from "@material-ui/core";
 import { Phone } from "@material-ui/icons";
 import Link from "next/link";

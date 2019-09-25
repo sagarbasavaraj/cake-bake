@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 import Link from "next/link";
 import { withStyles } from "@material-ui/core/styles";
+import { bool } from "prop-types";
 import { logout } from "../../actions/login-actions";
+import UserProfile from "./user-profile";
 
 function styles(theme) {
   return {
@@ -14,14 +16,19 @@ function styles(theme) {
 }
 
 class Auth extends PureComponent {
+  static propTypes = {
+    isUserLoggedIn: bool.isRequired
+  };
+
   logoutUser = () => {
     this.props.dispatch(logout());
   };
+
   render() {
-    const { classes, user } = this.props;
+    const { classes, isUserLoggedIn } = this.props;
     return (
       <>
-        {!user ? (
+        {!isUserLoggedIn ? (
           <>
             <Link href="/login">
               <Button
@@ -39,13 +46,7 @@ class Auth extends PureComponent {
             </Link>
           </>
         ) : (
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={this.logoutUser}
-          >
-            Log out
-          </Button>
+          <UserProfile onLogout={this.logoutUser} />
         )}
       </>
     );
@@ -54,6 +55,6 @@ class Auth extends PureComponent {
 
 export default withStyles(styles)(
   connect(state => ({
-    user: state.session.user
+    isUserLoggedIn: state.session.isUserLoggedIn
   }))(Auth)
 );

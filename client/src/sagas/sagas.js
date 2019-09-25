@@ -11,15 +11,16 @@ import { post, get } from "../helpers/api";
 import { showSpinner } from "../actions/common-actions";
 import { orderSaved, orderFailed, SAVE_ORDER } from "../actions/order-actions";
 import {
-  loginSuccess,
   loginError,
   LOGIN,
   SIGN_UP,
   LOGOUT,
   LOGIN_ERROR,
-  logoutSuccess
+  setUserLoggedStatus
 } from "../actions/login-actions";
 import { navigateTo } from "../helpers/navigation";
+import storage from "../helpers/storage-service";
+import { USER_INFO_STORAGE_KEY } from "../helpers/constants";
 
 //-----------LOGIN SAGAS --------------------------------------------------
 
@@ -27,7 +28,9 @@ function* authorize(email, password) {
   try {
     yield put(showSpinner(true));
     const user = yield call(post, "/users/login", { email, password });
-    yield put(loginSuccess(user));
+    yield put(setUserLoggedStatus(true));
+    //storage.saveItem(USER_INFO_STORAGE_KEY, user);
+    yield call([storage, storage.saveItem], USER_INFO_STORAGE_KEY, user);
     yield call(navigateTo, "/");
   } catch (error) {
     yield put(loginError(error));
@@ -40,7 +43,8 @@ function* logout() {
   try {
     console.log("calling logout");
     yield call(get, "/users/logout");
-    yield put(logoutSuccess());
+    yield put(setUserLoggedStatus(false));
+    yield call([storage, storage.removeItem], USER_INFO_STORAGE_KEY);
     yield call(navigateTo, "/");
   } catch (error) {
     console.error("Error in logging out..", error);
@@ -54,7 +58,6 @@ function* loginFlow() {
     } = yield take(LOGIN);
     const task = yield fork(authorize, email, password);
     const action = yield take([LOGOUT, LOGIN_ERROR]);
-    console.log(action);
     if (action.type === LOGOUT) {
       yield cancel(task);
       yield call(logout);

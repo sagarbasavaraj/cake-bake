@@ -22,7 +22,11 @@ const bindMiddleware = middleware => {
 };
 
 function configureStore() {
-  const sagaMiddleware = createSagaMiddleware();
+  const sagaMiddleware = createSagaMiddleware({
+    onError: (error, sagaStack) => {
+      console.error(error, " stack - ", sagaStack);
+    }
+  });
   const store = createStore(rootReducer, bindMiddleware([sagaMiddleware]));
 
   store.sagaTask = sagaMiddleware.run(rootSaga);

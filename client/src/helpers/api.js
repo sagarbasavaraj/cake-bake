@@ -2,12 +2,12 @@ import fetch from "isomorphic-unfetch";
 
 const API_BASE_PATH = "http://localhost:3000/api";
 
-function checkStatus(response) {
+const checkStatus = async (response) => {
   if (response.ok) {
     return response;
   } else {
-    var error = new Error(response.statusText);
-    error.response = response;
+    const error = new Error(response.statusText);
+    error.response = await response.json()
     return Promise.reject(error);
   }
 }

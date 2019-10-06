@@ -5,6 +5,7 @@ export const LOGIN = `${ns}.login`;
 export const SIGN_UP = `${ns}.signup`;
 export const LOGOUT = `${ns}.logout`;
 const USER_LOGGED = `${ns}.userLogged`;
+export const LOAD_PROFILE = `${ns}.loadProfile`;
 
 export const loginError = error => ({
   type: LOGIN_ERROR,
@@ -18,6 +19,7 @@ export const setUserLoggedStatus = status => ({
   type: USER_LOGGED,
   payload: { status }
 });
+export const loadProfile = (token) => ({ type: LOAD_PROFILE, payload: {token}})
 
 export const clearError = () => ({ type: CLEAR_ERROR });
 

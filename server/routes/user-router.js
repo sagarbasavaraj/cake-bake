@@ -53,7 +53,19 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/logout", function(req, res) {
   req.logout();
-  res.status(200).send({msg: "Logout successful"});
+  res.status(200).send({ msg: "Logout successful" });
+});
+
+router.get("/profile", function(req, res, next) {
+  passport.authenticate("jwt", { session: false }, (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(info);
+    }
+    res.status(200).send({ auth: true, ...user });
+  })(req, res, next);
 });
 
 module.exports = router;

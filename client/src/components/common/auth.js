@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { bool } from "prop-types";
 import { logout } from "../../actions/login-actions";
 import UserProfile from "./user-profile";
+import storage from "../../helpers/storage-service";
 
 function styles(theme) {
   return {

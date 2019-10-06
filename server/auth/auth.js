@@ -64,21 +64,30 @@ passport.use(
   )
 );
 
+const opts = {
+  //secret we used to sign our JWT
+  secretOrKey: config.get("secretOrKey"),
+  //we expect the user to send the token as a query paramater with the name 'token'
+  jwtFromRequest: ExtractJWT.fromHeader("token")
+};
+
 //This verifies that the token sent by the user is valid
 passport.use(
-  new JWTstrategy(
-    {
-      //secret we used to sign our JWT
-      secretOrKey: config.get("secretOrKey"),
-      //we expect the user to send the token as a query paramater with the name 'token'
-      jwtFromRequest: ExtractJWT.fromHeader("token")
-    },
-   (token, done) => {
-      if (token) {
-        return done(null, token.user);
-      };
-      console.log('jwt invalid');
-      return done(new Error('Error JWT Invalid'));
+  new JWTstrategy(opts, async (token, done) => {
+    try {
+      const user = await UserModel.findOne({
+        email: token.user.email
+      });
+      if (user) {
+        const {
+          _doc: { email, name, _id }
+        } = user;
+        done(null, { email, name, _id });
+      } else {
+        done(null, false);
+      }
+    } catch (err) {
+      done(err);
     }
-  )
+  })
 );

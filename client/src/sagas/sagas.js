@@ -16,7 +16,8 @@ import {
   SIGN_UP,
   LOGOUT,
   LOGIN_ERROR,
-  setUserLoggedStatus
+  setUserLoggedStatus,
+  LOAD_PROFILE
 } from "../actions/login-actions";
 import { navigateTo } from "../helpers/navigation";
 import storage from "../helpers/storage-service";
@@ -29,7 +30,6 @@ function* authorize(email, password) {
     yield put(showSpinner(true));
     const user = yield call(post, "/users/login", { email, password });
     yield put(setUserLoggedStatus(true));
-    //storage.saveItem(USER_INFO_STORAGE_KEY, user);
     yield call([storage, storage.saveItem], USER_INFO_STORAGE_KEY, user);
     yield call(navigateTo, "/");
   } catch (error) {
@@ -41,7 +41,6 @@ function* authorize(email, password) {
 
 function* logout() {
   try {
-    console.log("calling logout");
     yield call(get, "/users/logout");
     yield put(setUserLoggedStatus(false));
     yield call([storage, storage.removeItem], USER_INFO_STORAGE_KEY);
@@ -61,6 +60,33 @@ function* loginFlow() {
     if (action.type === LOGOUT) {
       yield cancel(task);
       yield call(logout);
+    }
+  }
+}
+
+function* getProfile(token) {
+  try {
+    yield call(get, "/users/profile", { token });
+    yield put(setUserLoggedStatus(true));
+  } catch (error) {
+    yield put(loginError(error));
+  }
+}
+
+function* loadProfile() {
+  while (true) {
+    const {
+      payload: { token }
+    } = yield take(LOAD_PROFILE);
+    const task = yield fork(getProfile, token);
+    const action = yield take([LOGOUT, LOGIN_ERROR]);
+    if (action.type === LOGOUT) {
+      yield cancel(task);
+      yield call(logout);
+    }
+    //if unable to load profile clear token from local storage.
+    if (action.type === LOGIN_ERROR) {
+      yield call([storage, storage.removeItem], USER_INFO_STORAGE_KEY);
     }
   }
 }
@@ -88,7 +114,8 @@ function* signupSaga() {
 function* saveOrder(action) {
   try {
     yield put(showSpinner(true));
-    const data = yield call(post, "/orders", action.payload);
+    const {token} = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
+    const data = yield call(post, "/orders", action.payload, {token});
     yield put(orderSaved(data));
   } catch (error) {
     yield put(orderFailed(error));
@@ -104,5 +131,5 @@ function* orderSaga() {
 //-----------END OF ORDER SAGAS ----------------------------------------------------
 
 export default function* rootSaga() {
-  yield all([orderSaga(), signupSaga(), loginFlow()]);
+  yield all([signupSaga(), loginFlow(), loadProfile(), orderSaga()]);
 }

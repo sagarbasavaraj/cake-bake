@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 import { ServerStyleSheets } from "@material-ui/styles";
 import flush from "styled-jsx/server";
@@ -37,7 +37,7 @@ export default class CakeBakeDocument extends Document {
 
   render() {
     return (
-      <html lang="en" dir="ltr">
+      <Html>
         <Head>
           <meta charSet="utf-8" />
           {/* Use minimum-scale=1 to enable GPU rasterization */}
@@ -60,7 +60,7 @@ export default class CakeBakeDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

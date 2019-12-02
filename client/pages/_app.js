@@ -1,5 +1,5 @@
 import React from "react";
-import App, { Container } from "next/app";
+import App from "next/app";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -61,7 +61,7 @@ class CakeBakeApp extends App {
     const { Component, pageProps, store } = this.props;
 
     return (
-      <Container>
+      <>
         <Head>
           <title>Cake Bake</title>
           <link rel='stylesheet' type='text/css' href='/static/nprogress.css' />
@@ -73,7 +73,7 @@ class CakeBakeApp extends App {
             <Component {...pageProps} />
           </Provider>
         </ThemeProvider>
-      </Container>
+      </>
     );
   }
 }

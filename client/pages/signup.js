@@ -105,9 +105,8 @@ const Signup = ({ dispatch }) => {
               {({ handleSubmit }) => {
                 return (
                   <Form className={classes.form} onSubmit={handleSubmit}>
-                    <Field
-                      name="name"
-                      render={({ field }) => {
+                    <Field name="name">
+                      {({ field }) => {
                         return (
                           <FormControl className={classes.formControl}>
                             <TextField
@@ -119,10 +118,9 @@ const Signup = ({ dispatch }) => {
                           </FormControl>
                         );
                       }}
-                    />
-                    <Field
-                      name="email"
-                      render={({ field }) => {
+                    </Field>
+                    <Field name="email">
+                      {({ field }) => {
                         return (
                           <FormControl className={classes.formControl}>
                             <TextField
@@ -134,10 +132,9 @@ const Signup = ({ dispatch }) => {
                           </FormControl>
                         );
                       }}
-                    />
-                    <Field
-                      name="password"
-                      render={({ field }) => {
+                    </Field>
+                    <Field name="password">
+                      {({ field }) => {
                         return (
                           <TextField
                             {...field}
@@ -168,7 +165,7 @@ const Signup = ({ dispatch }) => {
                           />
                         );
                       }}
-                    />
+                    </Field>
                     <Box my={3}>
                       <Button
                         fullWidth

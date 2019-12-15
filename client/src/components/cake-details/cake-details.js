@@ -74,9 +74,8 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
       <Formik initialValues={initialValues}>
         {({ values }) => (
           <Form className={classes.form}>
-            <Field
-              name="kg"
-              render={({ field, form }) => {
+            <Field name="kg">
+              {({ field, form }) => {
                 return (
                   <FormControl
                     variant="outlined"
@@ -105,10 +104,9 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
                   </FormControl>
                 );
               }}
-            />
-            <Field
-              name="deliveryDateTime"
-              render={({ field, form }) => {
+            </Field>
+            <Field name="deliveryDateTime">
+              {({ field, form }) => {
                 const { setFieldValue } = form;
                 return (
                   <MuiPickersUtilsProvider utils={DateMomentUtils}>
@@ -126,10 +124,9 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
                   </MuiPickersUtilsProvider>
                 );
               }}
-            />
-            <Field
-              name="cakeType"
-              render={({ field, form }) => {
+            </Field>
+            <Field name="cakeType">
+              {({ field, form }) => {
                 return (
                   <RadioGroup
                     aria-label="cakeType"
@@ -151,10 +148,9 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
                   </RadioGroup>
                 );
               }}
-            />
-            <Field
-              name="message"
-              render={(field, form) => {
+            </Field>
+            <Field name="message">
+              {(field, form) => {
                 return (
                   <TextField
                     label="Message on Cake"
@@ -167,7 +163,7 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
                   />
                 );
               }}
-            />
+            </Field>
             <FormControl className={classes.root}>
               <Button
                 variant="contained"

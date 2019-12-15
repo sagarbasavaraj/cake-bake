@@ -20,10 +20,7 @@ router.post("/", async (req, res) => {
     const order = new OrderModel(body);
     const savedOrder = await order.save();
     //EmailService.sendEmail(savedOrder);
-    setTimeout(() => {
-      res.json(savedOrder);
-    }, 10000)
-   
+    res.json(savedOrder);
   } catch (e) {
     res.status(500).send(e.message);
   }

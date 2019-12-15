@@ -114,7 +114,12 @@ function* signupSaga() {
 function* saveOrder(action) {
   try {
     yield put(showSpinner(true));
-    const {token} = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
+    const user = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
+    if (!user) {
+      yield call(navigateTo, "/login");
+      return;
+    }
+    const {token} = user;
     const data = yield call(post, "/orders", action.payload, {token});
     yield put(orderSaved(data));
   } catch (error) {

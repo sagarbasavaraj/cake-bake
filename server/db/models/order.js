@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
   kg: Number,
-  deliveryDateTime: Date,
+  datetime: Date,
   status: String,
   message: String,
   shape: String,

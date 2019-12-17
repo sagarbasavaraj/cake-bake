@@ -14,6 +14,9 @@ import {
 } from "@material-ui/core";
 import { ShoppingCart, Close, Delete } from "@material-ui/icons";
 import { red, grey } from "@material-ui/core/colors";
+import { object } from "prop-types";
+import { keys } from "lodash";
+import { connect } from "react-redux";
 
 const popover = {
   anchorOrigin: {
@@ -50,6 +53,10 @@ function styles(theme) {
 }
 
 class Cart extends PureComponent {
+  static propTypes = {
+    orders: object
+  };
+
   state = {
     anchorEl: null
   };
@@ -63,10 +70,11 @@ class Cart extends PureComponent {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, orders } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
     const id = open ? "cart-popover" : undefined;
+    const orderCount = keys(orders).length;
 
     return (
       <Fragment>
@@ -77,7 +85,11 @@ class Cart extends PureComponent {
           aria-describedby={id}
           onClick={this.handlePopoverOpen}
         >
-          <Badge className={classes.badge} badgeContent={4} color="secondary">
+          <Badge
+            className={classes.badge}
+            badgeContent={orderCount}
+            color="secondary"
+          >
             <ShoppingCart />
           </Badge>
         </IconButton>
@@ -138,5 +150,7 @@ class Cart extends PureComponent {
     );
   }
 }
-
-export default withStyles(styles)(Cart);
+const mapStateToProps = state => ({
+  orders: state.orders.data
+});
+export default withStyles(styles)(connect(mapStateToProps)(Cart));

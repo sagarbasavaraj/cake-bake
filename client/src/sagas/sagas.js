@@ -128,12 +128,12 @@ const getCustomer = state => state.session.customer;
 
 function* saveOrder(action) {
   try {
-    yield put(showSpinner(true));
     const token = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
     if (!token) {
       yield call(navigateTo, "/login");
       return;
     }
+    yield put(showSpinner(true));
     const customer = yield select(getCustomer);
     const data = yield call(
       post,

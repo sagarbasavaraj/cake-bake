@@ -10,7 +10,7 @@ import rootSaga from "../sagas/sagas";
 const rootReducer = combineReducers({
   common: commonReducer,
   session: loginReducer,
-  order: orderReducer
+  orders: orderReducer
 });
 
 const bindMiddleware = middleware => {

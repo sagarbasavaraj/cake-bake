@@ -43,7 +43,13 @@ router.post("/login", async (req, res, next) => {
         //Sign the JWT token and populate the payload with the user email and id
         const token = jwt.sign({ user: body }, config.get("secretOrKey"));
         //Send back the token to the user
-        return res.json({ token, email: user.email, id: user._id,  orders: user.orders});
+        return res.json({
+          token,
+          email: user.email,
+          id: user._id,
+          orders: user.orders,
+          name: user.name
+        });
       });
     } catch (error) {
       return next(error);

@@ -10,8 +10,13 @@ import {
 } from "redux-saga/effects";
 import { omit } from "lodash";
 import { post, get } from "../helpers/api";
-import { showSpinner } from "../actions/common-actions";
-import { orderSaved, orderFailed, SAVE_ORDER } from "../actions/order-actions";
+import { showSpinner, clearState } from "../actions/common-actions";
+import {
+  orderSaved,
+  orderFailed,
+  SAVE_ORDER,
+  saveOrders
+} from "../actions/order-actions";
 import {
   loginError,
   LOGIN,
@@ -34,7 +39,8 @@ function* authorize(email, password) {
     const user = yield call(post, "/users/login", { email, password });
     yield put(setUserLoggedStatus(true));
     yield call([storage, storage.saveItem], USER_INFO_STORAGE_KEY, user.token);
-    yield put(setCustomerData(omit(user, "token")));
+    yield put(saveOrders(user.orders));
+    yield put(setCustomerData(omit(user, ["token", "orders"])));
     yield call(navigateTo, "/");
   } catch (error) {
     yield put(loginError(error));
@@ -48,6 +54,7 @@ function* logout() {
     yield call(get, "/users/logout");
     yield put(setUserLoggedStatus(false));
     yield call([storage, storage.removeItem], USER_INFO_STORAGE_KEY);
+    yield put(clearState());
     yield call(navigateTo, "/");
   } catch (error) {
     console.error("Error in logging out..", error);
@@ -72,7 +79,8 @@ function* getProfile(token) {
   try {
     const customerData = yield call(get, "/users/profile", { token });
     yield put(setUserLoggedStatus(true));
-    yield put(setCustomerData(customerData));
+    yield put(saveOrders(customerData.orders));
+    yield put(setCustomerData(omit(customerData, ["orders"])));
   } catch (error) {
     yield put(loginError(error));
   }

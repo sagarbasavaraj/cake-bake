@@ -1,3 +1,5 @@
+import { CLEAR_STATE } from "./common-actions";
+
 const ns = "login.actions";
 export const LOGIN_ERROR = `${ns}.loginError`;
 const CLEAR_ERROR = `${ns}.clearError`;
@@ -24,10 +26,11 @@ export const loadProfile = token => ({
   type: LOAD_PROFILE,
   payload: { token }
 });
-
 export const clearError = () => ({ type: CLEAR_ERROR });
-
-export const setCustomerData = data => ({ type: SET_CUSTOMER_DATA, payload: { data } });
+export const setCustomerData = data => ({
+  type: SET_CUSTOMER_DATA,
+  payload: { data }
+});
 
 const INITIAL_STATE = { error: null, isUserLoggedIn: false, customer: null };
 
@@ -46,6 +49,9 @@ const loginReducer = (state = INITIAL_STATE, action) => {
     }
     case CLEAR_ERROR: {
       return state.set("error", null);
+    }
+    case CLEAR_STATE: {
+      return INITIAL_STATE;
     }
     default:
       return state;

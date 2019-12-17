@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 
 const initialValues = {
   kg: 1,
-  datetime: moment(),
+  deliveryDateTime: moment(),
   cakeType: "egg"
 };
 
@@ -150,7 +150,7 @@ function CakeDetails({ image, onBuyButtonClick, onAddToCartBtnClick }) {
               }}
             </Field>
             <Field name="message">
-              {(field, form) => {
+              {({field, form}) => {
                 return (
                   <TextField
                     label="Message on Cake"

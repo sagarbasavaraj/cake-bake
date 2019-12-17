@@ -44,7 +44,7 @@ passport.use(
     async (email, password, done) => {
       try {
         //Find the user associated with the email provided by the user
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email }).populate("orders");
         if (!user) {
           //If the user isn't found in the database, return a message
           return done(null, false, { message: "User not found" });
@@ -77,12 +77,10 @@ passport.use(
     try {
       const user = await UserModel.findOne({
         email: token.user.email
-      });
+      }).populate("orders");
       if (user) {
-        const {
-          _doc: { email, name, _id }
-        } = user;
-        done(null, { email, name, _id });
+        const { email, name, id, orders } = user;
+        done(null, { email, name, id, orders });
       } else {
         done(null, false);
       }

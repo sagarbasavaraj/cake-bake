@@ -5,6 +5,7 @@ export const LOGIN = `${ns}.login`;
 export const SIGN_UP = `${ns}.signup`;
 export const LOGOUT = `${ns}.logout`;
 const USER_LOGGED = `${ns}.userLogged`;
+const SET_CUSTOMER_DATA = `${ns}.setCustomerData`;
 export const LOAD_PROFILE = `${ns}.loadProfile`;
 
 export const loginError = error => ({
@@ -19,11 +20,16 @@ export const setUserLoggedStatus = status => ({
   type: USER_LOGGED,
   payload: { status }
 });
-export const loadProfile = (token) => ({ type: LOAD_PROFILE, payload: {token}})
+export const loadProfile = token => ({
+  type: LOAD_PROFILE,
+  payload: { token }
+});
 
 export const clearError = () => ({ type: CLEAR_ERROR });
 
-const INITIAL_STATE = { error: null, isUserLoggedIn: false };
+export const setCustomerData = data => ({ type: SET_CUSTOMER_DATA, payload: { data } });
+
+const INITIAL_STATE = { error: null, isUserLoggedIn: false, customer: null };
 
 const loginReducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
@@ -31,6 +37,9 @@ const loginReducer = (state = INITIAL_STATE, action) => {
   switch (type) {
     case USER_LOGGED: {
       return state.set("isUserLoggedIn", payload.status);
+    }
+    case SET_CUSTOMER_DATA: {
+      return state.set("customer", payload.data);
     }
     case LOGIN_ERROR: {
       return state.set("error", payload.error);

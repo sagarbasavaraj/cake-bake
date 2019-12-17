@@ -5,8 +5,10 @@ import {
   takeEvery,
   all,
   cancel,
-  take
+  take,
+  select
 } from "redux-saga/effects";
+import { omit } from "lodash";
 import { post, get } from "../helpers/api";
 import { showSpinner } from "../actions/common-actions";
 import { orderSaved, orderFailed, SAVE_ORDER } from "../actions/order-actions";
@@ -17,7 +19,8 @@ import {
   LOGOUT,
   LOGIN_ERROR,
   setUserLoggedStatus,
-  LOAD_PROFILE
+  LOAD_PROFILE,
+  setCustomerData
 } from "../actions/login-actions";
 import { navigateTo } from "../helpers/navigation";
 import storage from "../helpers/storage-service";
@@ -30,7 +33,8 @@ function* authorize(email, password) {
     yield put(showSpinner(true));
     const user = yield call(post, "/users/login", { email, password });
     yield put(setUserLoggedStatus(true));
-    yield call([storage, storage.saveItem], USER_INFO_STORAGE_KEY, user);
+    yield call([storage, storage.saveItem], USER_INFO_STORAGE_KEY, user.token);
+    yield put(setCustomerData(omit(user, "token")));
     yield call(navigateTo, "/");
   } catch (error) {
     yield put(loginError(error));
@@ -66,14 +70,15 @@ function* loginFlow() {
 
 function* getProfile(token) {
   try {
-    yield call(get, "/users/profile", { token });
+    const customerData = yield call(get, "/users/profile", { token });
     yield put(setUserLoggedStatus(true));
+    yield put(setCustomerData(customerData));
   } catch (error) {
     yield put(loginError(error));
   }
 }
 
-function* loadProfile() {
+function* loadCustomerProfile() {
   while (true) {
     const {
       payload: { token }
@@ -111,16 +116,23 @@ function* signupSaga() {
 
 //-----------ORDER SAGAS ----------------------------------------------------
 
+const getCustomer = state => state.session.customer;
+
 function* saveOrder(action) {
   try {
     yield put(showSpinner(true));
-    const user = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
-    if (!user) {
+    const token = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
+    if (!token) {
       yield call(navigateTo, "/login");
       return;
     }
-    const {token} = user;
-    const data = yield call(post, "/orders", action.payload, {token});
+    const customer = yield select(getCustomer);
+    const data = yield call(
+      post,
+      `/orders`,
+      { ...action.payload, user: customer.id },
+      { token }
+    );
     yield put(orderSaved(data));
   } catch (error) {
     yield put(orderFailed(error));
@@ -136,5 +148,5 @@ function* orderSaga() {
 //-----------END OF ORDER SAGAS ----------------------------------------------------
 
 export default function* rootSaga() {
-  yield all([signupSaga(), loginFlow(), loadProfile(), orderSaga()]);
+  yield all([signupSaga(), loginFlow(), loadCustomerProfile(), orderSaga()]);
 }

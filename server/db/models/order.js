@@ -4,11 +4,10 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
   kg: Number,
-  datetime: Date,
-  status: String,
+  deliveryDateTime: Date,
+  cakeType: String,
   message: String,
-  shape: String,
-  flavour: String
+  user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
 const OrderModel = mongoose.model("Order", OrderSchema);

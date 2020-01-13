@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  email: { type: String, required: true, unique: true, trim: true, minlength: 1 },
+  password: { type: String, required: true, minlength: 6 }
 });
 
 UserSchema.virtual("orders", {

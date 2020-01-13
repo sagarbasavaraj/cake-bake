@@ -2,31 +2,24 @@ import fetch from "isomorphic-unfetch";
 
 const API_BASE_PATH = "http://localhost:3000/api";
 
-const GLOBAL_HEADERS_PARAMS = {};
-
-export const setCommonHeaderParams = (params) => {
-  const {token} = params;
-  GLOBAL_HEADERS_PARAMS['token'] = token;
-}
-
-const checkStatus = async (response) => {
+const checkStatus = async response => {
   if (response.ok) {
     return response;
   } else {
     const error = new Error(response.statusText);
-    error.response = await response.json()
+    error.response = await response.json();
     return Promise.reject(error);
   }
-}
+};
 
 export const post = async (url, body, headers = {}) => {
   return fetch(`${API_BASE_PATH}${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...GLOBAL_HEADERS_PARAMS,
       ...headers
     },
+    credentials: "include",
     body: JSON.stringify(body)
   })
     .then(checkStatus)
@@ -36,7 +29,8 @@ export const post = async (url, body, headers = {}) => {
 export const get = async (url, headers = {}) => {
   return fetch(`${API_BASE_PATH}${url}`, {
     method: "GET",
-    headers: {...headers}
+    headers: { ...headers },
+    credentials: "include"
   })
     .then(checkStatus)
     .then(response => response.json());

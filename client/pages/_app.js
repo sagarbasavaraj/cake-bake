@@ -10,10 +10,7 @@ import withReduxSaga from "next-redux-saga";
 import NProgress from "nprogress";
 import Router from "next/router";
 import createStore from "../src/store/store";
-import storage from "../src/helpers/storage-service";
-import { USER_INFO_STORAGE_KEY } from "../src/helpers/constants";
-import { setCommonHeaderParams } from "../src/helpers/api";
-import { loadProfile } from "../src/actions/login-actions";
+import InitUser from "../src/components/init-user";
 
 NProgress.configure({ showSpinner: false });
 Router.events.on("routeChangeStart", (/*url*/) => {
@@ -35,6 +32,9 @@ class CakeBakeApp extends App {
 
   constructor() {
     super();
+    this.state = {
+      userInitialized: false
+    };
   }
 
   componentDidMount() {
@@ -43,20 +43,30 @@ class CakeBakeApp extends App {
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
-    //initialize storage service
-    storage.init();
-    //verify the user if token exist.
-    storage.getItem(USER_INFO_STORAGE_KEY).then(token => {
-      if (token) {
-        const { store } = this.props;
-        setCommonHeaderParams({ token });
-        store.dispatch(loadProfile(token));
-      }
-    });
   }
 
-  render() {
+  handleUserInitilazed = () => {
+    this.setState({ userInitialized: true });
+  };
+
+  _renderComponent = () => {
+    const { userInitialized } = this.state;
     const { Component, pageProps, store } = this.props;
+
+    if (!userInitialized) {
+      return (
+        <InitUser
+          dispatch={store.dispatch}
+          onUserInitialized={this.handleUserInitilazed}
+        />
+      );
+    }
+
+    return <Component {...pageProps} />;
+  };
+
+  render() {
+    const { store } = this.props;
 
     return (
       <>
@@ -67,9 +77,7 @@ class CakeBakeApp extends App {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Provider store={store}>
-            <Component {...pageProps} />
-          </Provider>
+          <Provider store={store}>{this._renderComponent()}</Provider>
         </ThemeProvider>
       </>
     );

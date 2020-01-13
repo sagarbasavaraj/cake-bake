@@ -42,6 +42,15 @@ router.post("/login", async (req, res, next) => {
         const body = { _id: user._id, email: user.email };
         //Sign the JWT token and populate the payload with the user email and id
         const token = jwt.sign({ user: body }, config.get("secretOrKey"));
+
+        const cookieOption = {
+          httpOnly: true,
+          sameSite: true,
+          signed: true,
+          secure: true
+        }
+        //set token in cookie
+        res.cookie('session_token', token, {httpOnly: false});
         //Send back the token to the user
         return res.json({
           token,
@@ -59,6 +68,7 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/logout", function(req, res) {
   req.logout();
+  res.clearCookie("session_token");
   res.status(200).send({ msg: "Logout successful" });
 });
 

@@ -28,8 +28,6 @@ import {
   setCustomerData
 } from "../actions/login-actions";
 import { navigateTo } from "../helpers/navigation";
-import storage from "../helpers/storage-service";
-import { USER_INFO_STORAGE_KEY } from "../helpers/constants";
 
 //-----------LOGIN SAGAS --------------------------------------------------
 
@@ -38,7 +36,6 @@ function* authorize(email, password) {
     yield put(showSpinner(true));
     const user = yield call(post, "/users/login", { email, password });
     yield put(setUserLoggedStatus(true));
-    yield call([storage, storage.saveItem], USER_INFO_STORAGE_KEY, user.token);
     yield put(saveOrders(user.orders));
     yield put(setCustomerData(omit(user, ["token", "orders"])));
     yield call(navigateTo, "/");
@@ -53,7 +50,6 @@ function* logout() {
   try {
     yield call(get, "/users/logout");
     yield put(setUserLoggedStatus(false));
-    yield call([storage, storage.removeItem], USER_INFO_STORAGE_KEY);
     yield put(clearState());
     yield call(navigateTo, "/");
   } catch (error) {
@@ -75,9 +71,9 @@ function* loginFlow() {
   }
 }
 
-function* getProfile(token) {
+function* getProfile() {
   try {
-    const customerData = yield call(get, "/users/profile", { token });
+    const customerData = yield call(get, "/users/profile");
     yield put(setUserLoggedStatus(true));
     yield put(saveOrders(customerData.orders));
     yield put(setCustomerData(omit(customerData, ["orders"])));
@@ -88,18 +84,12 @@ function* getProfile(token) {
 
 function* loadCustomerProfile() {
   while (true) {
-    const {
-      payload: { token }
-    } = yield take(LOAD_PROFILE);
-    const task = yield fork(getProfile, token);
+    yield take(LOAD_PROFILE);
+    const task = yield fork(getProfile);
     const action = yield take([LOGOUT, LOGIN_ERROR]);
     if (action.type === LOGOUT) {
       yield cancel(task);
       yield call(logout);
-    }
-    //if unable to load profile clear token from local storage.
-    if (action.type === LOGIN_ERROR) {
-      yield call([storage, storage.removeItem], USER_INFO_STORAGE_KEY);
     }
   }
 }
@@ -128,19 +118,12 @@ const getCustomer = state => state.session.customer;
 
 function* saveOrder(action) {
   try {
-    const token = yield call([storage, storage.getItem], USER_INFO_STORAGE_KEY);
-    if (!token) {
-      yield call(navigateTo, "/login");
-      return;
-    }
     yield put(showSpinner(true));
     const customer = yield select(getCustomer);
-    const data = yield call(
-      post,
-      `/orders`,
-      { ...action.payload, user: customer.id },
-      { token }
-    );
+    const data = yield call(post, `/orders`, {
+      ...action.payload,
+      user: customer.id
+    });
     yield put(orderSaved(data));
   } catch (error) {
     yield put(orderFailed(error));

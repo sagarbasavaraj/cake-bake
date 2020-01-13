@@ -22,9 +22,8 @@ export const setUserLoggedStatus = status => ({
   type: USER_LOGGED,
   payload: { status }
 });
-export const loadProfile = token => ({
-  type: LOAD_PROFILE,
-  payload: { token }
+export const loadProfile = () => ({
+  type: LOAD_PROFILE
 });
 export const clearError = () => ({ type: CLEAR_ERROR });
 export const setCustomerData = data => ({

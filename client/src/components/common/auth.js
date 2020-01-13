@@ -1,12 +1,8 @@
-import { PureComponent } from "react";
-import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 import Link from "next/link";
-import { withStyles } from "@material-ui/core/styles";
-import { bool } from "prop-types";
-import { logout } from "../../actions/login-actions";
+import { useSelector } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
 import UserProfile from "./user-profile";
-import storage from "../../helpers/storage-service";
 
 function styles(theme) {
   return {
@@ -16,46 +12,38 @@ function styles(theme) {
   };
 }
 
-class Auth extends PureComponent {
-  static propTypes = {
-    isUserLoggedIn: bool.isRequired
-  };
+const useStyles = makeStyles(styles);
 
-  logoutUser = () => {
-    this.props.dispatch(logout());
-  };
+const getIsUserLoggedIn = state => state.session.isUserLoggedIn;
 
-  render() {
-    const { classes, isUserLoggedIn } = this.props;
-    return (
-      <>
-        {!isUserLoggedIn ? (
-          <>
-            <Link href="/login">
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={classes.loginButton}
-              >
-                Log In
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button variant="contained" color="secondary">
-                Sign Up
-              </Button>
-            </Link>
-          </>
-        ) : (
-          <UserProfile onLogout={this.logoutUser} />
-        )}
-      </>
-    );
-  }
+function Auth() {
+  const isUserLoggedIn = useSelector(getIsUserLoggedIn);
+  const classes = useStyles();
+
+  return (
+    <>
+      {!isUserLoggedIn ? (
+        <>
+          <Link href="/login">
+            <Button
+              variant="outlined"
+              color="secondary"
+              className={classes.loginButton}
+            >
+              Log In
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button variant="contained" color="secondary">
+              Sign Up
+            </Button>
+          </Link>
+        </>
+      ) : (
+        <UserProfile />
+      )}
+    </>
+  );
 }
 
-export default withStyles(styles)(
-  connect(state => ({
-    isUserLoggedIn: state.session.isUserLoggedIn
-  }))(Auth)
-);
+export default Auth;

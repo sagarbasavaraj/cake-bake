@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const config = require("config");
 const passport = require("passport");
+const cookieParser = require("cookie-parser");
 const CakeBakeDb = require("./db/db");
 const router = require("./routes/default-router");
 const orderRoute = require("./routes/order-router");
@@ -19,8 +20,12 @@ class CakeBakeServer {
     const cakeBakeDb = new CakeBakeDb();
     const dbInstance = await cakeBakeDb.connectDB();
     const storageService = new StorageService(dbInstance.connection.db);
-
-    app.use(cors());
+    const corsOptions = {
+      origin: "http://localhost:5000",
+      credentials: true
+    };
+    app.use(cors(corsOptions));
+    app.use(cookieParser());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
 

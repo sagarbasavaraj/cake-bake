@@ -31,7 +31,11 @@ class Cakes extends PureComponent {
   }
 
   handleAddToCartBtnClick = data => {
-    this.props.dispatch(saveOrder(data));
+    const { image } = this.props;
+    const { _id, metadata, filename } = image;
+    this.props.dispatch(
+      saveOrder({ ...data, cakeDetails: { id: _id, metadata, filename } })
+    );
   };
 
   handleBuyBtnClick = data => {};

@@ -64,16 +64,29 @@ passport.use(
   )
 );
 
+const cookieExtractor = (req) => {
+  if (req && req.cookies) {
+    return req.cookies['session_token'];
+  }
+  return null
+};
+
 const opts = {
   //secret we used to sign our JWT
   secretOrKey: config.get("secretOrKey"),
   //we expect the user to send the token as a query paramater with the name 'token'
-  jwtFromRequest: ExtractJWT.fromHeader("token")
+  jwtFromRequest: cookieExtractor
 };
 
 //This verifies that the token sent by the user is valid
 passport.use(
   new JWTstrategy(opts, async (token, done) => {
+
+    if (!token) {
+      done("user not valid");
+      return;
+    }
+
     try {
       const user = await UserModel.findOne({
         email: token.user.email

@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useCallback } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { func } from "prop-types";
-import storage from "../../helpers/storage-service";
-import { USER_INFO_STORAGE_KEY } from "../../helpers/constants";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { logout } from "../../actions/login-actions";
 
 const anchorOrigin = {
   vertical: "top",
@@ -17,16 +16,13 @@ const transformOrigin = {
   horizontal: "right"
 };
 
-function UserProfile({ onLogout }) {
-  const [user, setUser] = useState(null);
+const getUser = state => state.session.customer;
+
+function UserProfile() {
+  const customer = useSelector(getUser, shallowEqual);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
-  const fetchUser = () => {
-    storage.getItem(USER_INFO_STORAGE_KEY).then(user => {
-      setUser(user);
-    });
-  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -36,14 +32,7 @@ function UserProfile({ onLogout }) {
     setAnchorEl(null);
   };
 
-  const logout = () => {
-    onLogout();
-    handleClose();
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
 
   return (
     <>
@@ -65,14 +54,10 @@ function UserProfile({ onLogout }) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={logout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </>
   );
 }
-
-UserProfile.propTypes = {
-  onLogout: func
-};
 
 export default UserProfile;
